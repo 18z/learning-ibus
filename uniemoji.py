@@ -27,15 +27,15 @@ from gi.repository import GLib
 from gi.repository import GObject
 
 import os
-import re
+# import re
 import sys
-import json
+# import json
 import getopt
 import locale
-import codecs
-from collections import Counter, defaultdict
+# import codecs
+from collections import defaultdict
 
-from difflib import SequenceMatcher
+# from difflib import SequenceMatcher
 
 try:
     import Levenshtein
@@ -50,6 +50,8 @@ else:
     import xdg.BaseDirectory
 
 debug_on = True
+
+
 def debug(*a, **kw):
     if debug_on:
         print(*a, **kw)
@@ -63,54 +65,56 @@ del n
 __base_dir__ = os.path.dirname(__file__)
 
 VALID_CATEGORIES = (
-    'Sm', # Symbol, math
-    'So', # Symbol, other
-    'Pd', # Punctuation, dash
-    'Po', # Punctuation, other
+    'Sm',  # Symbol, math
+    'So',  # Symbol, other
+    'Pd',  # Punctuation, dash
+    'Po',  # Punctuation, other
 )
 
 VALID_RANGES = (
-    (0x2000, 0x206f), # General Punctuation, Layout Controls, Invisible Operators
-    (0x2070, 0x209f), # Superscripts and Subscripts
-    (0x20a0, 0x20cf), # Currency Symbols
-    (0x20ac, 0x20ac), # Euro Sign
-    (0x20d0, 0x20ff), # Combining Diacritical Marks for Symbols
-    (0x2100, 0x214f), # Additional Squared Symbols, Letterlike Symbols
-    (0x2150, 0x218f), # Number Forms
-    (0x2190, 0x21ff), # Arrows
-    (0x2200, 0x22ff), # Mathematical Operators
-    (0x2300, 0x23ff), # Miscellaneous Technical, Floors and Ceilings
-    (0x2336, 0x237a), # APL symbols
-    (0x2400, 0x243f), # Control Pictures
-    (0x2440, 0x245f), # Optical Character Recognition (OCR)
-    (0x2460, 0x24ff), # Enclosed Alphanumerics
-    (0x2500, 0x257f), # Box Drawing
-    (0x2580, 0x259f), # Block Elements
-    (0x25a0, 0x25ff), # Geometric Shapes
-    (0x2600, 0x26ff), # Miscellaneous Symbols
-    (0x2616, 0x2617), # Japanese Chess
-    (0x2654, 0x265f), # Chess
-    (0x2660, 0x2667), # Card suits
-    (0x2630, 0x2637), # Yijing Trigrams
-    (0x268a, 0x268f), # Yijing Monograms and Digrams
-    (0x26c0, 0x26c3), # Checkers/Draughts
-    (0x2700, 0x27bf), # Dingbats
-    (0x27c0, 0x27ef), # Miscellaneous Mathematical Symbols-A
-    (0x27f0, 0x27ff), # Supplemental Arrows-A
-    (0x2800, 0x28ff), # Braille Patterns
-    (0x2900, 0x297f), # Supplemental Arrows-B
-    (0x2980, 0x29ff), # Miscellaneous Mathematical Symbols-B
-    (0x2a00, 0x2aff), # Supplemental Mathematical Operators
-    (0x2b00, 0x2bff), # Additional Shapes, Miscellaneous Symbols and Arrows
-    (0x1f300, 0x1f5ff), # Miscellaneous Symbols and Pictographs
-    (0x1f600, 0x1f64f), # Emoticons
-    (0x1f650, 0x1f67f), # Ornamental Dingbats
-    (0x1f680, 0x1f6ff), # Transport and Map Symbols
-    (0x1f900, 0x1f9ff), # Supplemental Symbols and Pictographs
+    # General Punctuation, Layout Controls, Invisible Operators
+    (0x2000, 0x206f),
+    (0x2070, 0x209f),  # Superscripts and Subscripts
+    (0x20a0, 0x20cf),  # Currency Symbols
+    (0x20ac, 0x20ac),  # Euro Sign
+    (0x20d0, 0x20ff),  # Combining Diacritical Marks for Symbols
+    (0x2100, 0x214f),  # Additional Squared Symbols, Letterlike Symbols
+    (0x2150, 0x218f),  # Number Forms
+    (0x2190, 0x21ff),  # Arrows
+    (0x2200, 0x22ff),  # Mathematical Operators
+    (0x2300, 0x23ff),  # Miscellaneous Technical, Floors and Ceilings
+    (0x2336, 0x237a),  # APL symbols
+    (0x2400, 0x243f),  # Control Pictures
+    (0x2440, 0x245f),  # Optical Character Recognition (OCR)
+    (0x2460, 0x24ff),  # Enclosed Alphanumerics
+    (0x2500, 0x257f),  # Box Drawing
+    (0x2580, 0x259f),  # Block Elements
+    (0x25a0, 0x25ff),  # Geometric Shapes
+    (0x2600, 0x26ff),  # Miscellaneous Symbols
+    (0x2616, 0x2617),  # Japanese Chess
+    (0x2654, 0x265f),  # Chess
+    (0x2660, 0x2667),  # Card suits
+    (0x2630, 0x2637),  # Yijing Trigrams
+    (0x268a, 0x268f),  # Yijing Monograms and Digrams
+    (0x26c0, 0x26c3),  # Checkers/Draughts
+    (0x2700, 0x27bf),  # Dingbats
+    (0x27c0, 0x27ef),  # Miscellaneous Mathematical Symbols-A
+    (0x27f0, 0x27ff),  # Supplemental Arrows-A
+    (0x2800, 0x28ff),  # Braille Patterns
+    (0x2900, 0x297f),  # Supplemental Arrows-B
+    (0x2980, 0x29ff),  # Miscellaneous Mathematical Symbols-B
+    (0x2a00, 0x2aff),  # Supplemental Mathematical Operators
+    (0x2b00, 0x2bff),  # Additional Shapes, Miscellaneous Symbols and Arrows
+    (0x1f300, 0x1f5ff),  # Miscellaneous Symbols and Pictographs
+    (0x1f600, 0x1f64f),  # Emoticons
+    (0x1f650, 0x1f67f),  # Ornamental Dingbats
+    (0x1f680, 0x1f6ff),  # Transport and Map Symbols
+    (0x1f900, 0x1f9ff),  # Supplemental Symbols and Pictographs
 )
 
+
 def in_range(code):
-    return any(x <= code <= y for x,y in VALID_RANGES)
+    return any(x <= code <= y for x, y in VALID_RANGES)
 
 MATCH_LIMIT = 100
 
@@ -124,7 +128,9 @@ else:
 CANDIDATE_UNICODE = 0
 CANDIDATE_ALIAS = 1
 
+
 class UniEmojiChar(object):
+
     def __init__(self, unicode_str=None, is_emojione=False, is_custom=False):
         self.unicode_str = unicode_str
         self.aliasing = []
@@ -155,98 +161,6 @@ class UniEmoji(IBus.Engine):
         self.ascii_table = {}
         self.reverse_ascii_table = {}
         self.alias_table = {}
-        with codecs.open(os.path.join(__base_dir__, 'UnicodeData.txt'), encoding='utf-8') as unicodedata:
-            for line in unicodedata.readlines():
-                if not line.strip(): continue
-                code, name, category, _ = line.split(';', 3)
-                code = int(code, 16)
-                if category not in VALID_CATEGORIES:
-                    continue
-                if not in_range(code):
-                    continue
-                name = name.lower()
-                unicode_char = unichr(code)
-                self.table[name] = UniEmojiChar(unicode_char)
-                self.unicode_chars_to_names[unicode_char] = name
-
-        # Load emojione file
-        alias_counter = Counter()
-        temp_alias_table = defaultdict(set)
-
-        emojione = json.load(codecs.open(os.path.join(__base_dir__, 'emojione.json'), encoding='utf-8'))
-        for emoji_shortname, info in emojione.iteritems():
-
-            # ZWJ emojis such as 'family', 'couple', and 'kiss' appear in an
-            # alternate field
-            alternate_form = info.get('unicode_alternates')
-            if alternate_form and '200d' in alternate_form:
-                print('found alternate', alternate_form)
-                chars = alternate_form
-            else:
-                chars = info['unicode']
-
-            unicode_str = u''.join(unichr(int(codepoint, 16)) for codepoint in chars.split('-'))
-            self.unicode_chars_to_shortnames[unicode_str] = emoji_shortname
-
-            emoji_shortname = emoji_shortname.replace('_', ' ')
-
-            if emoji_shortname in self.table:
-                # Check for clashes between emojione's names and the existing unicode name.
-                # Clashes turn into aliases.
-                if unicode_str != self.table[emoji_shortname].unicode_str:
-                    self.table[emoji_shortname].aliasing.append(unicode_str)
-            elif info['category'] == 'flags':
-                flag_name = 'flag of ' + info['name']
-                self.table[flag_name] = UniEmojiChar(unicode_str, is_emojione=True)
-                self.unicode_chars_to_names[unicode_str] = flag_name
-            else:
-                self.table[emoji_shortname] = UniEmojiChar(unicode_str, is_emojione=True)
-
-            # When the string defined by emojione isn't in Unicode
-            # (because it's a combination of characters), use emojione's
-            # descriptive name, and set the shortname as an alias
-            if unicode_str not in self.unicode_chars_to_names:
-                long_name = info['name']
-                self.unicode_chars_to_names[unicode_str] = long_name
-                if long_name not in self.table:
-                    self.table[long_name] = UniEmojiChar(unicode_str)
-
-            # EmojiOne has duplicate entries in the keywords array
-            keywords = set(info.get('keywords', []))
-            for alias in keywords:
-                alias_counter[alias] += 1
-                temp_alias_table[alias].add(unicode_str)
-
-            for ascii_aliases in info.get('aliases_ascii', []):
-                self.ascii_table[ascii_aliases] = unicode_str
-                self.reverse_ascii_table[unicode_str] = info['name']
-
-        # Load less-frequent aliases from emojione file
-        for alias, n in alias_counter.most_common():
-            if n >= 20:
-                continue
-            self.table[alias].aliasing.extend(temp_alias_table[alias])
-
-        # Load custom file(s)
-        for d in reversed(SETTINGS_DIRS):
-            custom_filename = os.path.join(d, 'custom.json')
-            debug('Loading custom emoji from {}'.format(custom_filename))
-            if os.path.isfile(custom_filename):
-                custom_table = None
-                try:
-                    with codecs.open(custom_filename, encoding='utf-8') as f:
-                        custom_table = json.loads(f.read())
-                except:
-                    error = sys.exc_info()[1]
-                    debug(error)
-                    self.table = {
-                        u'Failed to load custom file {}: {}'.format(custom_filename, error): u'ERROR'
-                    }
-                    break
-                else:
-                    debug(custom_table)
-                    for k, v in custom_table.iteritems():
-                        self.table[k] = UniEmojiChar(v, is_custom=True)
 
         debug("Create UniEmoji engine OK")
 
@@ -325,7 +239,6 @@ class UniEmoji(IBus.Engine):
         self.is_invalidate = True
         GLib.idle_add(self.update_candidates)
 
-
     def page_up(self):
         if self.lookup_table.page_up():
             self._update_lookup_table()
@@ -358,184 +271,85 @@ class UniEmoji(IBus.Engine):
     def commit_candidate(self):
         self.commit_string(self.candidates[self.lookup_table.get_cursor_pos()])
 
-    def filter(self, query, candidates = None):
-        if len(self.table) <= 10:
-            # this only happens if something went wrong; it's our cheap way of displaying errors
-            return [[0, 0, message] for message in self.table]
-
-        if candidates is None: candidates = self.table
-
-        # Replace '_' in query with ' ' since that's how emojione names are stored
-        query = query.replace('_', ' ')
-
-        query_words = []
-        for w in query.split():
-            escaped_w = re.escape(w)
-            query_words.append((
-                w,
-                re.compile(r'\b' + escaped_w + r'\b'),
-                re.compile(r'\b' + escaped_w),
-            ))
-
-        # Matches are tuples of the form:
-        # (match_type, score, name)
-        # Match types are:
-        # * 20 - exact
-        # * 10 - substring
-        # * 5 - substring of alias
-        # * 0 - levenshtein distance
-        matched = []
-
-        for candidate, candidate_info in candidates.iteritems():
-            if len(query) > len(candidate): continue
-
-            if query == candidate:
-                # Exact match
-                if candidate_info.unicode_str:
-                    matched.append((20, 0, candidate, CANDIDATE_UNICODE))
-                if candidate_info.aliasing:
-                    matched.append((5, 0, candidate, CANDIDATE_ALIAS))
-            else:
-                # Substring match
-                word_ixs = []
-                substring_found = False
-                exact_word_match = 0
-                prefix_match = 0
-                for w, exact_regex, prefix_regex in query_words:
-                    ix = candidate.find(w)
-                    if ix == -1:
-                        word_ixs.append(100)
-                    else:
-                        substring_found = True
-                        word_ixs.append(ix)
-
-                        # Check if an exact word match or a prefix match
-                        if exact_regex.search(candidate):
-                            exact_word_match += 1
-                        elif prefix_regex.search(candidate):
-                            prefix_match += 1
-
-                if substring_found and all(ix >= 0 for ix in word_ixs):
-                    # For substrings, the closer to the origin, the better
-                    score = -(float(sum(word_ixs)) / len(word_ixs))
-
-                    # Receive a boost if the substring matches a word or a prefix
-                    score += 20 * exact_word_match + 10 * prefix_match
-
-                    if candidate_info.unicode_str:
-                        matched.append((10, score, candidate, CANDIDATE_UNICODE))
-                    if candidate_info.aliasing:
-                        matched.append((5, score, candidate, CANDIDATE_ALIAS))
-                else:
-                    # Levenshtein distance
-                    score = 0
-                    if Levenshtein is None:
-                        opcodes = SequenceMatcher(None, query, candidate,
-                            autojunk=False).get_opcodes()
-                    else:
-                        opcodes = Levenshtein.opcodes(query, candidate)
-                    for (tag, i1, i2, j1, j2) in opcodes:
-                        if tag in ('replace', 'delete'):
-                            score = 0
-                            break
-                        if tag == 'insert':
-                            score -= 1
-                        if tag == 'equal':
-                            score += i2 - i1
-                            # favor word boundaries
-                            if j1 == 0:
-                                score += 2
-                            elif candidate[j1 - 1] == ' ':
-                                score += 1
-                            if j2 == len(candidate):
-                                score += 2
-                            elif [j2] == ' ':
-                                score += 1
-                    if score > 0:
-                        if candidate_info.unicode_str:
-                            matched.append((0, score, candidate, CANDIDATE_UNICODE))
-                        if candidate_info.aliasing:
-                            matched.append((0, score, candidate, CANDIDATE_ALIAS))
-
-        # The first two fields are sorted in reverse.
-        # The third text field is sorted by the length of the string, then alphabetically.
-        matched.sort(key=lambda x: (len(x[2]), x[2]))
-        matched.sort(key=lambda x: (x[0], x[1]), reverse=True)
-        return matched[:MATCH_LIMIT]
-
     def update_candidates(self):
         preedit_len = len(self.preedit_string)
         attrs = IBus.AttrList()
         self.lookup_table.clear()
         self.candidates = []
-        candidate_strings = set()
+        # candidate_strings = set()
 
         if preedit_len > 0:
             # Look for an ASCII alias that matches exactly
-            ascii_match = self.ascii_table.get(self.preedit_string)
-            if ascii_match:
-                unicode_name = self.reverse_ascii_table[ascii_match]
-                display_str = u'{}: {} [{}]'.format(ascii_match, unicode_name, self.preedit_string)
-                candidate = IBus.Text.new_from_string(display_str)
-                self.candidates.append(ascii_match)
-                self.lookup_table.append_candidate(candidate)
+            unicode_name = '1'
+            ascii_match = 'first'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
-            # Look for a fuzzy match against a description
-            for level, score, name, candidate_type in self.filter(self.preedit_string.lower()):
-                uniemoji_char = self.table[name]
+            unicode_name = '2'
+            ascii_match = 'second'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
-                # Since we have several source (UnicodeData.txt, EmojiOne),
-                # make sure we don't output multiple identical candidates
-                if candidate_type == CANDIDATE_UNICODE:
-                    if uniemoji_char.unicode_str in candidate_strings:
-                        continue
-                    candidate_strings.add(uniemoji_char.unicode_str)
+            unicode_name = '3'
+            ascii_match = 'third'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
-                    display_str = None
-                    if uniemoji_char.is_emojione:
-                        unicode_name = self.unicode_chars_to_names.get(uniemoji_char.unicode_str)
-                        if unicode_name and unicode_name != name:
-                            display_str = u'{}: :{}: {}'.format(
-                                uniemoji_char.unicode_str,
-                                name.replace(' ', '_'),
-                                unicode_name)
-                    if display_str is None:
-                        shortname = self.unicode_chars_to_shortnames.get(uniemoji_char.unicode_str, '')
-                        if shortname:
-                            shortname = ':' + shortname + ': '
-                        display_str = u'{}: {}{}'.format(
-                            uniemoji_char.unicode_str,
-                            shortname,
-                            name)
+            unicode_name = '4'
+            ascii_match = 'fourth'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
-                    candidate = IBus.Text.new_from_string(display_str)
-                    self.candidates.append(uniemoji_char.unicode_str)
-                    self.lookup_table.append_candidate(candidate)
+            unicode_name = '5'
+            ascii_match = 'fifth'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
-                # Aliases expand into several candidates
-                for unicode_str in uniemoji_char.aliasing:
-                    if unicode_str in candidate_strings:
-                        continue
-                    candidate_strings.add(unicode_str)
-                    unicode_name = self.unicode_chars_to_names.get(unicode_str)
-                    shortname = self.unicode_chars_to_shortnames.get(unicode_str, '')
-                    if shortname:
-                        shortname = ':' + shortname + ': '
-                    display_str = u'{}: {}{} [{}]'.format(
-                        unicode_str,
-                        shortname,
-                        unicode_name,
-                        name)
-                    candidate = IBus.Text.new_from_string(display_str)
-                    self.candidates.append(unicode_str)
-                    self.lookup_table.append_candidate(candidate)
+            unicode_name = '6'
+            ascii_match = 'sixth'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
+
+            unicode_name = '7'
+            ascii_match = 'seventh'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
+
+            unicode_name = '8'
+            ascii_match = 'eighth'
+            display_str = u'{}: {} [{}]'.format(
+                ascii_match, unicode_name, self.preedit_string)
+            candidate = IBus.Text.new_from_string(display_str)
+            self.candidates.append(ascii_match)
+            self.lookup_table.append_candidate(candidate)
 
         text = IBus.Text.new_from_string(self.preedit_string)
         text.set_attributes(attrs)
         self.update_auxiliary_text(text, preedit_len > 0)
 
         attrs.append(IBus.Attribute.new(IBus.AttrType.UNDERLINE,
-                IBus.AttrUnderline.SINGLE, 0, preedit_len))
+                                        IBus.AttrUnderline.SINGLE, 0, preedit_len))
         text = IBus.Text.new_from_string(self.preedit_string)
         text.set_attributes(attrs)
         self.update_preedit_text(text, preedit_len, preedit_len > 0)
@@ -545,7 +359,6 @@ class UniEmoji(IBus.Engine):
     def _update_lookup_table(self):
         visible = self.lookup_table.get_number_of_candidates() > 0
         self.update_lookup_table(self.lookup_table, visible)
-
 
     def do_focus_in(self):
         debug("focus_in")
@@ -566,6 +379,7 @@ class UniEmoji(IBus.Engine):
 ###########################################################################
 # the app (main interface to ibus)
 class IMApp:
+
     def __init__(self, exec_by_ibus):
         if not exec_by_ibus:
             global debug_on
@@ -598,11 +412,13 @@ def launch_engine(exec_by_ibus):
     IBus.init()
     IMApp(exec_by_ibus).run()
 
-def print_help(out, v = 0):
+
+def print_help(out, v=0):
     print("-i, --ibus             executed by IBus.", file=out)
     print("-h, --help             show this message.", file=out)
     print("-d, --daemonize        daemonize ibus", file=out)
     sys.exit(v)
+
 
 def main():
     try:
