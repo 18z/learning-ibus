@@ -31,7 +31,7 @@ line 479 ~ 481
     display_str = u'{}: {} [{}]'.format(ascii_match, unicode_name, self.preedit_string)
 
     其中
-        ascii_match 就是選字表的數字，按下數字即可commit 所選擇的字串。
+        ascii_match 就是選字表的數字，按下數字即可commit 所選擇的字串?
         unicode_name 就是真正的候選字。
         self.preedit_string 就是我們打的字。
 
