@@ -3,8 +3,8 @@
 # TODO: parameterize this and the xml file (maybe scons?)
 install:
 	mkdir -p /usr/share/ibus-uniemoji /etc/xdg/uniemoji
-	cp uniemoji.py uniemoji.svg /usr/share/ibus-uniemoji
-	chmod a+x /usr/share/ibus-uniemoji/uniemoji.py
+	cp uniemoji.py engine.py uniemoji.svg /usr/share/ibus-uniemoji
+	chmod a+x /usr/share/ibus-uniemoji/uniemoji.py /usr/share/ibus-uniemoji/engine.py
 	cp uniemoji.xml /usr/share/ibus/component
 
 uninstall:
