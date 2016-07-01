@@ -30,7 +30,6 @@ import os
 import sys
 import getopt
 import locale
-from collections import defaultdict
 
 
 try:
@@ -69,22 +68,6 @@ else:
 ###########################################################################
 
 
-class UniEmojiChar(object):
-
-    def __init__(self, unicode_str=None, is_emojione=False, is_custom=False):
-        self.unicode_str = unicode_str
-        self.aliasing = []
-        self.is_emojione = is_emojione
-        self.is_custom = is_custom
-
-    def __repr__(self):
-        return 'UniEmojiChar(unicode_str={}, is_emojione={}, is_custom={}, aliasing={})'.format(
-            self.unicode_str,
-            self.is_emojione,
-            self.is_custom,
-            self.aliasing)
-
-
 # the engine
 class UniEmoji(IBus.Engine):
     __gtype_name__ = 'UniEmoji'
@@ -95,12 +78,6 @@ class UniEmoji(IBus.Engine):
         self.preedit_string = u""
         self.lookup_table = IBus.LookupTable.new(10, 0, True, True)
         self.prop_list = IBus.PropList()
-        self.table = defaultdict(UniEmojiChar)
-        self.unicode_chars_to_names = {}
-        self.unicode_chars_to_shortnames = {}
-        self.ascii_table = {}
-        self.reverse_ascii_table = {}
-        self.alias_table = {}
 
         debug("Create UniEmoji engine OK")
 
