@@ -5,7 +5,7 @@
     <description>Unicode emoji and symbols by name</description>
     <version>0.4.0</version>
     <license>GPL</license>
-    <author>Lalo Martins &lt;lalo.martins@gmail.com&gt;</author>
+    <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
     <homepage>https://github.com/salty-horse/ibus-uniemoji</homepage>
     <exec>/usr/bin/python2 /usr/share/ibus-uniemoji/learning-ibus.py --ibus</exec>
     <textdomain>uniemoji</textdomain>
@@ -16,7 +16,7 @@
             <description>Unicode emoji and symbols by name</description>
             <language></language>
             <license>GPL</license>
-            <author>Lalo Martins &lt;lalo.martins@gmail.com&gt;</author>
+            <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
             <icon>/usr/share/ibus-uniemoji/ibus-lung.svg</icon>
             <layout>default</layout>
             <layout_variant>default</layout_variant>
