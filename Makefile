@@ -3,11 +3,11 @@
 # TODO: parameterize this and the xml file (maybe scons?)
 install:
 	mkdir -p /usr/share/ibus-uniemoji /etc/xdg/uniemoji
-	cp uniemoji.py engine.py ibus-lung.svg /usr/share/ibus-uniemoji
-	chmod a+x /usr/share/ibus-uniemoji/uniemoji.py
-	cp uniemoji.xml /usr/share/ibus/component
+	cp learning-ibus.py engine.py ibus-lung.svg /usr/share/ibus-uniemoji
+	chmod a+x /usr/share/ibus-uniemoji/learning-ibus.py
+	cp learning-ibus.xml /usr/share/ibus/component
 
 uninstall:
 	rm -rf /usr/share/ibus-uniemoji
 	rm -rf /etc/xdg/uniemoji
-	rm -f /usr/share/ibus/component/uniemoji.xml
+	rm -f /usr/share/ibus/component/learning-ibus.xml
