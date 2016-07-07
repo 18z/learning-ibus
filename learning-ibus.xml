@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- filename: uniemoji.xml -->
+<!-- filename: learning-ibus.xml -->
 <component>
     <name>org.freedesktop.IBus.UniEmoji</name>
     <description>Learning IBus from UniEmoji</description>
@@ -8,12 +8,12 @@
     <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
     <homepage>https://github.com/18z/learning-ibus</homepage>
     <exec>/usr/bin/python2 /usr/share/learning-ibus/learning-ibus.py --ibus</exec>
-    <textdomain>uniemoji</textdomain>
+    <textdomain>learning-ibus</textdomain>
     <engines>
         <engine>
-            <name>uniemoji</name>
-            <longname>uniemoji</longname>
-            <description>Unicode emoji and symbols by name</description>
+            <name>learning-ibus</name>
+            <longname>learning-ibus</longname>
+            <description>Learning IBus from UniEmoji</description>
             <language></language>
             <license>GPL</license>
             <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
