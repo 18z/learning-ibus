@@ -7,7 +7,7 @@
     <license>GPL</license>
     <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
     <homepage>https://github.com/18z/learning-ibus</homepage>
-    <exec>/usr/bin/python2 /usr/share/ibus-uniemoji/learning-ibus.py --ibus</exec>
+    <exec>/usr/bin/python2 /usr/share/learning-ibus/learning-ibus.py --ibus</exec>
     <textdomain>uniemoji</textdomain>
     <engines>
         <engine>
@@ -17,7 +17,7 @@
             <language></language>
             <license>GPL</license>
             <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
-            <icon>/usr/share/ibus-uniemoji/ibus-lung.svg</icon>
+            <icon>/usr/share/learning-ibus/ibus-lung.svg</icon>
             <layout>default</layout>
             <layout_variant>default</layout_variant>
             <layout_option>default</layout_option>
