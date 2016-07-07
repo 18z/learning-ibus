@@ -6,7 +6,7 @@
     <version>0.0.0</version>
     <license>GPL</license>
     <author>KunYu Chen &lt;xspiritualx@gmail.com&gt;</author>
-    <homepage>https://github.com/salty-horse/ibus-uniemoji</homepage>
+    <homepage>https://github.com/18z/learning-ibus</homepage>
     <exec>/usr/bin/python2 /usr/share/ibus-uniemoji/learning-ibus.py --ibus</exec>
     <textdomain>uniemoji</textdomain>
     <engines>
