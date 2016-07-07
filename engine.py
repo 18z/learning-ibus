@@ -223,60 +223,6 @@ class UniEmoji(IBus.Engine):
             self.candidates.append(ascii_match)
             self.lookup_table.append_candidate(candidate)
 
-        if self.preedit_string == "c":
-            unicode_name = '4'
-            ascii_match = 'third'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
-        if self.preedit_string == "d":
-            unicode_name = '5'
-            ascii_match = 'fourth'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
-        if self.preedit_string == "e":
-            unicode_name = '6'
-            ascii_match = 'fifth'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
-        if self.preedit_string == "f":
-            unicode_name = '7'
-            ascii_match = 'sixth'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
-        if self.preedit_string == "g":
-            unicode_name = '8'
-            ascii_match = 'seventh'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
-        if self.preedit_string == "h":
-            unicode_name = '9'
-            ascii_match = 'eighth'
-            display_str = u'{}: {} [{}]'.format(
-                ascii_match, unicode_name, self.preedit_string)
-            candidate = IBus.Text.new_from_string(display_str)
-            self.candidates.append(ascii_match)
-            self.lookup_table.append_candidate(candidate)
-
         text = IBus.Text.new_from_string(self.preedit_string)
         text.set_attributes(attrs)
         self.update_auxiliary_text(text, preedit_len > 0)
@@ -307,5 +253,3 @@ class UniEmoji(IBus.Engine):
 
     def do_property_activate(self, prop_name):
         debug("PropertyActivate(%s)" % prop_name)
-
-
