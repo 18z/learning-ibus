@@ -15,6 +15,8 @@
     則在使用
     ```System Settings``` -> ```All Settings``` -> ```Text Entry``` -> ```Input Source to use``` 框框中左下方的 ```+```
     新增輸入法引擎時會找不到剛剛所安裝的輸入法引擎。
+    
+    或是藉由輸入法 icon 如下圖的```酷```，點擊後，點擊最下方的 ```Text Entry Settings``` 進入。
 
     詳如下圖：
 
