@@ -81,3 +81,10 @@ class IMApp:
                 component = IBus.Component.new_from_file(xml_path)
             self.bus.register_component(component)
 ```
+
+```python
+關鍵是 self.factory.add_engine("uniemoji", GObject.type_from_name("UniEmoji"))
+從這裡開始，會用到 engine.py 裡的 class Unimoji。
+```
+
+
