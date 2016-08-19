@@ -81,4 +81,3 @@ class IMApp:
                 component = IBus.Component.new_from_file(xml_path)
             self.bus.register_component(component)
 ```
-
