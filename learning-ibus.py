@@ -61,9 +61,9 @@ del n
 __base_dir__ = os.path.dirname(__file__)
 
 if xdg:
-    SETTINGS_DIRS = list(xdg.BaseDirectory.load_config_paths('uniemoji'))
+    SETTINGS_DIRS = list(xdg.BaseDirectory.load_config_paths('learning-ibus'))
 else:
-    SETTINGS_DIRS = [d for d in [os.path.expanduser('~/.config/uniemoji'), '/etc/xdg/uniemoji']
+    SETTINGS_DIRS = [d for d in [os.path.expanduser('~/.config/learning-ibus'), '/etc/xdg/learning-ibus']
                      if os.path.isdir(d)]
 
 
@@ -79,16 +79,17 @@ class IMApp:
         self.bus = IBus.Bus()
         self.bus.connect("disconnected", self.bus_disconnected_cb)
         self.factory = IBus.Factory.new(self.bus.get_connection())
-        self.factory.add_engine("uniemoji", GObject.type_from_name("UniEmoji"))
+        self.factory.add_engine(
+            "learning-ibus", GObject.type_from_name("UniEmoji"))
         if exec_by_ibus:
             self.bus.request_name("org.freedesktop.IBus.UniEmoji", 0)
         else:
-            xml_path = os.path.join(__base_dir__, 'uniemoji.xml')
+            xml_path = os.path.join(__base_dir__, 'learning-ibus.xml')
             if os.path.exists(xml_path):
                 component = IBus.Component.new_from_file(xml_path)
             else:
                 xml_path = os.path.join(os.path.dirname(__base_dir__),
-                                        'ibus', 'component', 'uniemoji.xml')
+                                        'ibus', 'component', 'learning-ibus.xml')
                 component = IBus.Component.new_from_file(xml_path)
             self.bus.register_component(component)
 

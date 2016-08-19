@@ -24,12 +24,12 @@ from __future__ import print_function
 
 from gi.repository import IBus
 from gi.repository import GLib
-from gi.repository import GObject
+# from gi.repository import GObject
 
 import os
-import sys
-import getopt
-import locale
+# import sys
+# import getopt
+# import locale
 
 
 try:
@@ -60,9 +60,9 @@ del n
 __base_dir__ = os.path.dirname(__file__)
 
 if xdg:
-    SETTINGS_DIRS = list(xdg.BaseDirectory.load_config_paths('uniemoji'))
+    SETTINGS_DIRS = list(xdg.BaseDirectory.load_config_paths('learning-ibus'))
 else:
-    SETTINGS_DIRS = [d for d in [os.path.expanduser('~/.config/uniemoji'), '/etc/xdg/uniemoji']
+    SETTINGS_DIRS = [d for d in [os.path.expanduser('~/.config/learning-ibus'), '/etc/xdg/learning-ibus']
                      if os.path.isdir(d)]
 
 ###########################################################################
