@@ -43,3 +43,42 @@ def main():
 launch_engine(exec_by_ibus)
 ```
 
+```python
+def print_help(out, v=0):
+    print("-i, --ibus             executed by IBus.", file=out)
+    print("-h, --help             show this message.", file=out)
+    print("-d, --daemonize        daemonize ibus", file=out)
+    sys.exit(v)
+```
+
+```python
+def launch_engine(exec_by_ibus):
+    IBus.init()
+    IMApp(exec_by_ibus).run()
+```
+
+```python
+class IMApp:
+
+    def __init__(self, exec_by_ibus):
+        if not exec_by_ibus:
+            global debug_on
+            debug_on = True
+        self.mainloop = GLib.MainLoop()
+        self.bus = IBus.Bus()
+        self.bus.connect("disconnected", self.bus_disconnected_cb)
+        self.factory = IBus.Factory.new(self.bus.get_connection())
+        self.factory.add_engine("uniemoji", GObject.type_from_name("UniEmoji"))
+        if exec_by_ibus:
+            self.bus.request_name("org.freedesktop.IBus.UniEmoji", 0)
+        else:
+            xml_path = os.path.join(__base_dir__, 'uniemoji.xml')
+            if os.path.exists(xml_path):
+                component = IBus.Component.new_from_file(xml_path)
+            else:
+                xml_path = os.path.join(os.path.dirname(__base_dir__),
+                                        'ibus', 'component', 'uniemoji.xml')
+                component = IBus.Component.new_from_file(xml_path)
+            self.bus.register_component(component)
+```
+
