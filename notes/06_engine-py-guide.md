@@ -89,22 +89,27 @@ engine.py 主體就是 class Unimoji。
 
 ```python
 self.preedit_string
+# 在真正將字輸入至標的文件前，使用者輸入的字 (在此階段可以選字)。
 ```
 
 ```python
 self.lookup_table.get_number_of_candidates()
+# 查詢候選字數量。
 ```
 
 ```python
 self.commit_candidate()
+# 直接將選好的 candidate 輸入至標的文件中。
 ```
 
 ```python
 self.commit_string()
+# 將使用者輸入且調整好的字串正式輸入至標的文件中。
 ```
 
 ```python
 self.update_candidate()
+# 最關鍵函式，在此函式中可定義候選字庫，更新使用者輸入字串。
 ```
 
 ```python
@@ -113,23 +118,20 @@ self.invalidate()
 
 ```python
 self.lookup_table.get_page_size()
-```
-
-```python
 self.lookup_table.set_cursor_pos()
+# 取得候選字表的狀態。
 ```
 
 ```python
 self.page_up()
-```
-
-```python
 self.page_down()
+# 以頁為單位翻動候選字表。
 ```
 
 ```python
 self.cursor_up()
 self.cursor_down()
+# 移動候選字表裡的游標。
 ```
 
 ```
